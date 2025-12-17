@@ -1,0 +1,11 @@
+scapy
+pandas
+numpy
+joblib
+xgboost
+scikit-learn
+fastapi
+uvicorn
+jinja2
+python-multipart
+requests
