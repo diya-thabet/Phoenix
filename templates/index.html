@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial_scale=1.0">
+    <title>Phoenix / CyberGuard AI</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: {
+                            900: '#0a0a0f',
+                            800: '#13131f',
+                            700: '#1c1c2e',
+                        },
+                        neon: {
+                            green: '#00ff9d',
+                            red: '#ff2a6d',
+                            blue: '#05d9e8',
+                            purple: '#d300c5',
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { 
+            background-color: #050508; 
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(5, 217, 232, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(211, 0, 197, 0.08) 0%, transparent 25%);
+            color: #e2e8f0; 
+        }
+        
+        .glass-panel {
+            background: rgba(19, 19, 31, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .neon-text-green { text-shadow: 0 0 10px rgba(0, 255, 157, 0.5); }
+        .neon-text-red { text-shadow: 0 0 10px rgba(255, 42, 109, 0.5); }
+        .neon-border-green { box-shadow: 0 0 15px rgba(0, 255, 157, 0.2); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0f; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .table-row-animate {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-200 p-4 md:p-8">
+
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center mb-10 max-w-7xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="relative w-10 h-10 flex items-center justify-center bg-gray-900 rounded-lg border border-slate-700 shadow-xl">
+                <span class="text-2xl">🦅</span>
+                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-green opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-neon-green"></span>
+                </span>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-white">PHOENIX <span class="text-neon-green text-lg font-light">AI</span></h1>
+                <p class="text-xs text-slate-500 font-mono tracking-widest">INTELLIGENT DEFENSE SYSTEM</p>
+            </div>
+        </div>
+        
+        <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3 border border-emerald-500/20 neon-border-green">
+            <div class="h-2 w-2 rounded-full bg-neon-green animate-pulse-fast"></div>
+            <span class="text-xs font-bold text-neon-green tracking-wide">SYSTEM ACTIVE - PROTECTED</span>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        <!-- STATS COLUMN (Left) -->
+        <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Stat 1 -->
+            <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                    <svg class="w-16 h-16 text-neon-red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <h3 class="text-slate-400 text-xs font-bold tracking-widest uppercase">Total Threats Detected</h3>
+                <div class="flex items-end gap-2 mt-2">
+                    <span id="total-alerts" class="text-4xl font-bold text-white font-mono">0</span>
+                    <span class="text-xs text-neon-red mb-1 font-mono">▲ HIGH PRIORITY</span>
+                </div>
+            </div>
+
+            <!-- Stat 2 -->
+            <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                    <svg class="w-16 h-16 text-neon-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                </div>
+                <h3 class="text-slate-400 text-xs font-bold tracking-widest uppercase">Most Frequent Detection</h3>
+                <div class="flex items-end gap-2 mt-2">
+                    <span id="top-attack" class="text-2xl font-bold text-white truncate">None</span>
+                </div>
+            </div>
+
+            <!-- Stat 3 -->
+            <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                    <svg class="w-16 h-16 text-neon-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-slate-400 text-xs font-bold tracking-widest uppercase">AI Confidence Score</h3>
+                <div class="flex items-end gap-2 mt-2">
+                    <span id="avg-conf" class="text-4xl font-bold text-neon-green font-mono">0%</span>
+                    <span class="text-xs text-slate-500 mb-1">AVG PRECISION</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        
+        <!-- Live Feed Section -->
+        <div class="lg:col-span-3 glass-panel rounded-2xl p-6 min-h-[400px]">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="w-1.5 h-6 bg-neon-red rounded-full shadow-[0_0_10px_rgba(255,42,109,0.8)]"></span>
+                    Live Intrusions Feed
+                </h2>
+                <span class="text-xs font-mono text-slate-500 bg-dark-900/50 px-2 py-1 rounded border border-slate-700">LIVE FEED ON</span>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead>
+                        <tr class="text-slate-500 border-b border-slate-700/50 font-mono text-xs uppercase tracking-wider">
+                            <th class="pb-3 pl-2">Time</th>
+                            <th class="pb-3">Type</th>
+                            <th class="pb-3">Source Vector</th>
+                            <th class="pb-3">Target</th>
+                            <th class="pb-3 text-right pr-4">AI Conf.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alert-table-body" class="font-mono text-slate-300 divide-y divide-slate-800/50">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="lg:col-span-1 glass-panel rounded-2xl p-6 flex flex-col items-center justify-center relative">
+            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 w-full text-center">Threat Distribution</h2>
+            <div class="relative w-full aspect-square">
+                <canvas id="attackChart"></canvas>
+                <!-- Center text overlay -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span class="text-4xl font-bold text-white" id="chart-total">0</span>
+                    <span class="text-xs text-slate-500">EVENTS</span>
+                </div>
+            </div>
+            
+            <div class="mt-6 w-full space-y-2" id="legend-container">
+                <!-- Custom Legend -->
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-12 text-center text-slate-600 text-sm py-6">
+        <p>PHOENIX AI SECURITY SYTEM &copy; 2025</p>
+    </footer>
+
+    <script>
+        let chartInstance = null;
+
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/data');
+                const data = await response.json();
+                
+                // Animate Numbers if simple
+                document.getElementById('total-alerts').innerText = data.total_count;
+                document.getElementById('chart-total').innerText = data.total_count;
+                document.getElementById('top-attack').innerText = data.top_attack || "None";
+                document.getElementById('avg-conf').innerText = data.avg_confidence + "%";
+
+                // Update Table
+                const tbody = document.getElementById('alert-table-body');
+                tbody.innerHTML = "";
+                
+                if (data.recent_alerts.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-600 italic">No threats detected yet. System secure.</td></tr>`;
+                } else {
+                    data.recent_alerts.forEach((alert, index) => {
+                        // Color coding based on attack type (simplified logic)
+                        let badgeColor = "text-neon-red";
+                        if (alert.type.includes("Scan")) badgeColor = "text-neon-blue";
+                        if (alert.type.includes("Bot")) badgeColor = "text-neon-purple";
+
+                        const row = `
+                            <tr class="hover:bg-white/5 transition duration-150 table-row-animate" style="animation-delay: ${index * 50}ms">
+                                <td class="py-3 pl-2 text-slate-400">${alert.time}</td>
+                                <td class="py-3 font-bold ${badgeColor} drop-shadow-md">${alert.type}</td>
+                                <td class="py-3 text-slate-300">
+                                    <span class="bg-dark-800 px-2 py-0.5 rounded border border-slate-700">${alert.src}</span>
+                                </td>
+                                <td class="py-3 text-slate-500">${alert.dst}:${alert.dport}</td>
+                                <td class="py-3 text-right pr-4">
+                                    <div class="inline-flex items-center gap-2">
+                                        <div class="w-16 h-1 bg-slate-800 rounded-full overflow-hidden">
+                                            <div class="h-full bg-neon-green" style="width: ${alert.conf}%"></div>
+                                        </div>
+                                        <span class="text-xs text-neon-green">${alert.conf}%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                }
+
+                // Update Chart
+                updateChart(data.distribution);
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        function updateChart(dist) {
+            const ctx = document.getElementById('attackChart').getContext('2d');
+            const labels = Object.keys(dist);
+            const values = Object.values(dist);
+
+            // Custom Colors
+            const colors = ['#ff2a6d', '#05d9e8', '#d300c5', '#00ff9d', '#ff9f1c'];
+
+            if (chartInstance) {
+                chartInstance.data.labels = labels;
+                chartInstance.data.datasets[0].data = values;
+                chartInstance.update();
+            } else {
+                chartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: colors,
+                            borderColor: '#13131f', // Match card bg
+                            borderWidth: 2,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '75%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(19, 19, 31, 0.9)',
+                                bodyColor: '#fff',
+                                borderColor: 'rgba(255,255,255,0.1)',
+                                borderWidth: 1,
+                                padding: 10,
+                                cornerRadius: 8,
+                                displayColors: true
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Generate Custom Legend
+            const legendContainer = document.getElementById('legend-container');
+            legendContainer.innerHTML = '';
+            labels.forEach((label, i) => {
+                const val = values[i];
+                const color = colors[i % colors.length];
+                legendContainer.innerHTML += `
+                    <div class="flex justify-between items-center text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full shadow-[0_0_8px_currentColor]" style="background-color: ${color}; color: ${color}"></span>
+                            <span class="text-slate-400">${label}</span>
+                        </div>
+                        <span class="font-mono font-bold text-slate-200">${val}</span>
+                    </div>
+                `;
+            });
+        }
+
+        setInterval(fetchData, 2000);
+        fetchData();
+    </script>
+</body>
+</html>
